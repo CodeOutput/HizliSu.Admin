@@ -1,0 +1,277 @@
+<div [@routerTransition]>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header p-0">
+                    <h4>Marka Detay</h4>
+                    <ul class="ust_menu">
+                        <li routerLink="/app/manufacturers" pTooltip="Geri Dön" tooltipPosition="left">
+                            <i class="pi pi-replay"></i>
+                        </li>
+                        <li *ngIf="activeIndex<1" (click)="saveRow()" pTooltip="Bilgileri Kaydet"
+                            tooltipPosition="left">
+                            <i class="pi pi-save"></i>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+
+                    <p-tabView [(activeIndex)]="activeIndex">
+                        <p-tabPanel header="Detay">
+                            <div class="p-grid p-fluid">
+
+                                <div class="p-col-12 p-md-3">
+                                    <div class="p-field">
+                                        <label for="name">Marka Adı</label>
+                                        <input id="name" type="text" [(ngModel)]="item.name" pInputText
+                                               class="p-inputtext-sm"/>
+                                    </div>
+                                </div>
+
+                                <div class="p-col-12 p-md-6">
+                                    <div class="p-field">
+                                        <label for="description">Açıklama</label>
+                                        <input id="description" type="text" [(ngModel)]="item.description" pInputText
+                                               class="p-inputtext-sm"/>
+                                    </div>
+                                </div>
+
+                                <div class="p-col-12 p-md-3">
+                                    <div class="p-field">
+                                        <label for="sortOrder">Sıra No</label>
+                                        <input id="sortOrderAtt" type="number" [(ngModel)]="item.sortOrder" pInputText
+                                               class="p-inputtext-sm"/>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-3 text-center" *ngIf="imagePath!= null">
+                                    <img [src]="imagePath" width="50"/>
+                                </div>
+                                <div class="p-col-12 p-md-9">
+                                    <p-fileUpload name="content" customUpload="true" auto="auto"
+                                                  chooseLabel="Resim seçiniz"
+                                                  uploadLabel="Resim Yükle"
+                                                  cancelLabel="İptal"
+                                                  (uploadHandler)="fileUpload($event)">
+                                    </p-fileUpload>
+                                </div>
+
+                            </div>
+
+
+                        </p-tabPanel>
+                        <p-tabPanel header="Tesis" [disabled]="item.id ==null">
+                            <div class="clearfix mb-3">
+                                <button pButton type="button" style="width: 120px"
+                                        label="Tesis Ekle"
+                                        (click)="addOrUpdateFacility(null)"
+                                        class="p-button-outlined p-button-sm float-right"></button>
+                            </div>
+
+
+                            <p-table [value]="list" dataKey="name">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem"></th>
+                                        <th>Adı</th>
+                                        <th>Açıklama</th>
+                                        <th class="text-center">İşlemler</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-expanded="expanded">
+                                    <tr>
+                                        <td>
+                                            <button type="button" pButton pRipple [pRowToggler]="row" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                        </td>
+                                        <td>{{row.name}}</td>
+                                        <td>{{ (row.description == null ? '' : row.description)}}</td>
+                                        <td class="text-center">
+                                            <div>
+                                                <button pButton type="button" icon="pi pi-pencil" iconPos="left"
+                                                        label=""
+                                                        (click)="addOrUpdateFacility(row)"
+                                                        class="p-button-raised p-button-rounded p-button-outlined mr-2">
+                                                </button>
+                                                <button pButton type="button" icon="pi pi-trash" iconPos="right"
+                                                        label=""
+                                                        (click)="deleteConfirm($event, row)"
+                                                        class="p-button-raised p-button-danger p-button-rounded p-button-outlined">
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="rowexpansion" let-row  let-rowIndex="rowIndex" >
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="p-p-3">
+                                                <div class="clearfix mb-3">
+                                                    <button pButton type="button" style="width: 120px"
+                                                            label="Özellik Ekle"
+                                                            (click)="addOrUpdateFacilityAttribute(row,null)"
+                                                            class="p-button-secondary p-button-outlined p-button-sm float-right"></button>
+                                                </div>
+
+                                                <p-table [value]="row.facilityAttributes" dataKey="id">
+                                                    <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Başlık</th>
+                                                        <th>Değer</th>
+                                                        <th>Sıralama</th>
+                                                        <th>İşlemler</th>
+                                                    </tr>
+                                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-att let-rowIndex="rowIndex" >
+                                    <tr>
+                                        <td>{{rowIndex+1}}</td>
+                                        <td>{{att.key}}</td>
+                                        <td>{{att.value}}</td>
+                                        <td>{{att.sortOrder}}</td>
+                                        <td class="text-center">
+                                            <div>
+                                                <button pButton type="button" icon="pi pi-pencil" iconPos="left"
+                                                        label=""
+                                                        (click)="addOrUpdateFacilityAttribute(row, att)"
+                                                        class="p-button-raised p-button-rounded p-button-outlined mr-2">
+                                                </button>
+                                                <button pButton type="button" icon="pi pi-trash" iconPos="right"
+                                                        label=""
+                                                        (click)="deleteConfirmFacilityAttribute($event, att)"
+                                                        class="p-button-raised p-button-danger p-button-rounded p-button-outlined">
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="4">Henüz veri eklemediniz.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+
+
+                        </p-tabPanel>
+
+                    </p-tabView>
+
+                </div>
+                <div class="card-footer table-card-footer bg-light border-top">
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<p-dialog [(visible)]="displayPopup" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="true" [resizable]="true">
+    <p-header>
+       Tesis {{facility.id==null? 'Ekle': 'Güncelle'}}
+    </p-header>
+
+
+    <div class="p-grid p-fluid">
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="facName">Tesis Adı</label>
+                <input id="facName" type="text" [(ngModel)]="facility.name" pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="facDescription">Tesis Açıklama</label>
+                <input id="facDescription" type="text" [(ngModel)]="facility.description"  pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="address">Tesis Adres</label>
+                <input id="address" type="text" [(ngModel)]="facility.address"  pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <hr class="p-col-12"/>
+
+    </div>
+
+
+    <p-footer>
+
+
+        <button pButton type="button" label="Kaydet" (click)="saveFacility()"
+                icon="pi pi-check"
+                class="p-button-outlined"></button>
+
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayFacilityAttributePopup" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="true" [resizable]="true">
+    <p-header>
+        Özellik {{facilityAttribute.id==null? 'Ekle': 'Güncelle'}}
+    </p-header>
+
+
+    <div class="p-grid p-fluid">
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="key">Özellik Başlık</label>
+                <input id="key" type="text" [(ngModel)]="facilityAttribute.key" pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="value">Özellik Değeri</label>
+                <input id="value" type="text" [(ngModel)]="facilityAttribute.value"  pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <div class="p-col-12">
+            <div class="p-field">
+                <label for="sortOrderAtt">Özellik Sıralaması</label>
+                <input id="sortOrder" type="number" [(ngModel)]="facilityAttribute.sortOrder"  pInputText
+                       class="p-inputtext-sm"/>
+            </div>
+        </div>
+
+        <hr class="p-col-12"/>
+
+    </div>
+
+
+    <p-footer>
+
+
+        <button pButton type="button" label="Kaydet" (click)="saveFacilityAttribute()"
+                icon="pi pi-check"
+                class="p-button-outlined"></button>
+
+    </p-footer>
+</p-dialog>
