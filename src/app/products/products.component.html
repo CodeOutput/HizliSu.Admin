@@ -41,6 +41,7 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th [style]="{'width':'80px'}">#</th>
+                                    <th>Marka</th>
                                     <th>Ürün Adı</th>
                                     <th>Paketteki Ürün Sayısı</th>
                                     <th>Birim Fiyatı</th>
@@ -51,6 +52,7 @@
                             <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
                                 <tr>
                                     <td>{{ rowIndex + 1}}</td>
+                                    <td>{{row.manufacturer.name}}</td>
                                     <td>{{row.name}}</td>
                                     <td>{{row.unitQuantity}}</td>
                                     <td>{{row.unitPrice |currency: "TRY":"symbol"}}</td>
