@@ -1,0 +1,173 @@
+<div [@routerTransition]>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header p-0">
+                    <h4>Ürün Detay</h4>
+                    <ul class="ust_menu">
+                        <li routerLink="/app/products" pTooltip="Geri Dön" tooltipPosition="left">
+                            <i class="pi pi-replay"></i>
+                        </li>
+                        <li (click)="saveRow()" pTooltip="Bilgileri Kaydet" tooltipPosition="left">
+                            <i class="pi pi-save"></i>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="p-grid p-fluid">
+
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="name">Kategori</label>
+                                <p-dropdown [options]="categoryList" class="p-inputtext-sm w-100"
+                                            filter="true"
+                                            [showClear]="true" placeholder="Seçiniz"
+                                            appendTo="body"
+                                            [style]="{'width':'100%'}"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [(ngModel)]="item.categoryId">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="name">Marka</label>
+                                <p-dropdown [options]="manufacturerList" class="p-inputtext-sm w-100"
+                                            filter="true"
+                                            (onChange)="getListByManufacturerId($event.value)"
+                                            [showClear]="true" placeholder="Seçiniz"
+                                            appendTo="body"
+                                            [style]="{'width':'100%'}"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [(ngModel)]="item.manufacturerId">
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="name">Tesis</label>
+                                <p-dropdown [options]="facilityList" class="p-inputtext-sm w-100"
+                                            filter="true"
+                                            [showClear]="true" placeholder="Seçiniz"
+                                            appendTo="body"
+                                            [style]="{'width':'100%'}"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [(ngModel)]="item.facilityId">
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="name">Ürün Adı</label>
+                                <input id="name" type="text" [(ngModel)]="item.name" pInputText class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="sellerCode">Satıcı Kodu</label>
+                                <input id="sellerCode" type="text" [(ngModel)]="item.sellerCode" pInputText
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field">
+                                <label for="barcode">Barkod</label>
+                                <input id="barcode" type="text" [(ngModel)]="item.barcode" pInputText
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field">
+                                <label for="description">Açıklama</label>
+                                <input id="description" type="text" [(ngModel)]="item.description" pInputText
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field">
+                                <label for="stockQuantity">Stok Miktarı</label>
+                                <input id="stockQuantity" type="number" [(ngModel)]="item.stockQuantity" pInputText
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-2">
+                            <div class="p-field">
+                                <label for="price">Fiyatı</label>
+                                <input id="price" type="number" [(ngModel)]="item.price" pInputText
+                                       (focusout)="calc(item)"  (keyup)="calc(item)"
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+
+                        <div class="p-col-12 p-md-2">
+                            <div class="p-field">
+                                <label for="unitQuantity">Paketteki Adet Sayısı</label>
+                                <input id="unitQuantity" type="number" [(ngModel)]="item.unitQuantity" pInputText
+                                       (focusout)="calc(item)" (keyup)="calc(item)"
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-1">
+                            <div class="p-field">
+                                <label for="unitPrice">Birim Fiyatı</label>
+                                <input id="unitPrice" type="number" disabled [(ngModel)]="item.unitPrice" pInputText
+                                       class="p-inputtext-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-2">
+                            <div class="p-field">
+                                <label>Yayınla</label>
+                                <div>
+                                    <p-checkbox [binary]="true" [(ngModel)]="item.published"></p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="p-col-12 p-md-9">
+                            <p-fileUpload name="content" customUpload="true" auto="auto"
+                                          chooseLabel="Resim seçiniz"
+                                          uploadLabel="Resim Yükle"
+                                          cancelLabel="İptal"
+                                          (uploadHandler)="fileUpload($event)">
+                            </p-fileUpload>
+                        </div>
+
+                        <div class="p-col-12 p-md-3 text-center" *ngIf="imagePath!= null">
+                            <img [src]="imagePath" width="150" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer table-card-footer bg-light border-top">
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

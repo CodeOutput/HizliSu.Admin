@@ -1,7 +1,7 @@
 import {Input, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientJsonpModule} from '@angular/common/http';
+import {HttpClient, HttpClientJsonpModule} from '@angular/common/http';
 import {HttpClientModule} from '@angular/common/http';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
@@ -58,7 +58,17 @@ import {TabViewModule} from 'primeng/tabview';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CitiesComponent} from './cities/cities.component';
 import {CitiesDetailComponent} from './cities/cities-detail.component';
+import {OrdersComponent} from './orders/orders.component';
+import {OrderDetailComponent} from './orders/order-detail.component';
+import {CalendarModule} from 'primeng/calendar';
 
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 @NgModule({
     declarations: [
         AppComponent,
@@ -87,6 +97,9 @@ import {CitiesDetailComponent} from './cities/cities-detail.component';
         // Products
         ProductsComponent,
         ProductDetailComponent,
+        // Orders
+        OrdersComponent,
+        OrderDetailComponent,
         // address
         CitiesComponent,
         CitiesDetailComponent,
@@ -126,7 +139,16 @@ import {CitiesDetailComponent} from './cities/cities-detail.component';
         ToastModule,
         DropdownModule,
         TabViewModule,
-        InputTextareaModule
+        InputTextareaModule,
+        CalendarModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'tr',
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [
         ConfirmationService,

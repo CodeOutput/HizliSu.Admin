@@ -16,6 +16,8 @@ import {ProductsComponent} from './products/products.component';
 import {ProductDetailComponent} from './products/product-detail.component';
 import {CitiesComponent} from './cities/cities.component';
 import {CitiesDetailComponent} from './cities/cities-detail.component';
+import {OrdersComponent} from './orders/orders.component';
+import {OrderDetailComponent} from './orders/order-detail.component';
 
 @NgModule({
     imports: [
@@ -61,6 +63,17 @@ import {CitiesDetailComponent} from './cities/cities-detail.component';
                         path: 'products/:productId',
                         component: ProductDetailComponent,
                         data: {permission: 'Pages.Roles'},
+                        canActivate: [AppRouteGuard]
+                    }, {
+                        path: 'orders',
+                        component: OrdersComponent,
+                        data: {permission: 'Pages.Orders'},
+                        canActivate: [AppRouteGuard]
+                    },
+                    {
+                        path: 'orders/:orderId',
+                        component: OrderDetailComponent,
+                        data: {permission: 'Pages.Orders'},
                         canActivate: [AppRouteGuard]
                     },
                     {
