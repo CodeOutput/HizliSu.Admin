@@ -26,9 +26,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     public totalRecords = 0;
     public loading = false;
     public pageable: Pageable = new Pageable();
-    public calendarLocale = environment.calendar;
 
-    constructor(
+   constructor(
         injector: Injector,
         private translateService: TranslateService,
         private orderService: OrderService,
