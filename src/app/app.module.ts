@@ -64,6 +64,7 @@ import {CalendarModule} from 'primeng/calendar';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {FieldsetModule} from 'primeng/fieldset';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -139,6 +140,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         ToastModule,
         DropdownModule,
         TabViewModule,
+        FieldsetModule,
         InputTextareaModule,
         CalendarModule,
         TranslateModule.forRoot({

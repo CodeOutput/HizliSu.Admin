@@ -16,26 +16,26 @@ import {Manufacturer} from '../../shared/models/manufacturer.model';
 import {Category} from '../../shared/models/category.model';
 import {DecimalPipe} from '@angular/common';
 import {Facility} from '../../shared/models/facility.model';
+import {OrderService} from '../../shared/services/order.service';
+import {Order} from '../../shared/models/order.model';
+import {OrderItem} from '../../shared/models/order-item.model';
+import {OrderStatus} from '../../shared/models/order-status.model';
 
 
 @Component({
     templateUrl: './order-detail.component.html',
     animations: [appModuleAnimation()],
-    providers: [ProductService, CategoryService, ManufacturerService, DecimalPipe]
+    providers: [OrderService, DecimalPipe]
 })
 export class OrderDetailComponent implements OnInit, OnDestroy {
-    item: Product = new Product();
-    productId: number;
+    item: Order = new Order();
+    orderId: number;
     public imagePath: any;
-    manufacturerList: Manufacturer[] = [];
-    facilityList: Facility[] = [];
-    categoryList: Category[] = [];
+    orderItemList: OrderItem[] = [];
+    orderStatusList: OrderStatus[] = [];
     subscriptions: Subscription[] = [];
-
     constructor(
-        private productService: ProductService,
-        private categoryService: CategoryService,
-        private manufacturerService: ManufacturerService,
+        private orderService: OrderService,
         private messageService: MessageService,
         private cdr: ChangeDetectorRef,
         private sanitizer: DomSanitizer,
@@ -52,48 +52,56 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.getOrderStatusList();
         this.activatedRoute.paramMap.subscribe((params => {
-            this.productId = toNumber(params.get('productId'));
-            if (params.get('productId').toLowerCase() !== 'add') {
-                this.getItemById(this.productId);
+            this.orderId = toNumber(params.get('orderId'));
+            if (params.get('orderId').toLowerCase() !== 'add') {
+                this.getItemById(this.orderId);
+                this.getOrderItemListByOrderId(this.orderId);
             }
         }));
-        this.getCategoryList();
-        this.getManufacturerList();
     }
 
     getItemById(id: number) {
-        const sb = this.productService.getItemById(id).subscribe(resp => {
-            console.log('gategory list ---->>', resp.result);
+        const sb = this.orderService.getItemById(id).subscribe(resp => {
+            console.log('getItemById ---->>', resp.result);
             this.item = resp.result;
-            this.item.unitPrice = +(this.item.price / this.item.unitQuantity).toFixed(2);
-            this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + this.item.image.content);
             this.cdr.detectChanges();
         }, (error) => {
-            // this.loading = false;
             this.messageService.add({
                 severity: 'error',
                 summary: 'Veri çekme işlemi',
                 detail: 'Kayıtlar alınamadı! Hata:' + JSON.stringify(error)
             });
         }, () => {
-            this.getListByManufacturerId(this.item.manufacturerId);
         });
         this.subscriptions.push(sb);
     }
 
-    getListByManufacturerId(id: number) {
-        if (id == null) {
-            this.facilityList = [];
-            this.cdr.detectChanges();
-            return;
-        }
-        const sb = this.manufacturerService.getListByManufacturerId(id).subscribe(resp => {
-            console.log('getListByManufacturerId list ---->>', resp.result);
-            this.facilityList = resp.result.items;
+    getOrderItemListByOrderId(id: number) {
+        const sb2 = this.orderService.getOrderItemListByOrderId(id).subscribe(resp => {
+            console.log('getOrderItemListByOrderId ---->>', resp.result);
+            this.orderItemList = resp.result.items;
+            for (const row of this.orderItemList) {
+                row.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + row.product.image.content);
+            }
             this.cdr.detectChanges();
         }, (error) => {
-            // this.loading = false;
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Veri çekme işlemi',
+                detail: 'Kayıtlar alınamadı! Hata:' + JSON.stringify(error)
+            });
+        }, () => {
+        });
+        this.subscriptions.push(sb2);
+    }
+    getOrderStatusList() {
+        const sb = this.orderService.getOrderStatusList().subscribe(resp => {
+            console.log('getOrderStatusList list ---->>', resp.result.items);
+            this.orderStatusList = resp.result.items;
+            this.cdr.detectChanges();
+        }, (error) => {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Veri çekme işlemi',
@@ -103,24 +111,14 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
         this.subscriptions.push(sb);
     }
 
-    fileUpload(event: any) {
-        if (event.files.length === 0) {
-            console.log('Hiç bir dosya seçilmedi.');
-            return;
-        }
-        this.item.file = event.files[0];
-    }
-
-    saveRow() {
-
-        this.productService.saveProduct(this.item).subscribe(resp => {
+    saveOrderStatus() {
+        this.orderService.saveOrderStatus(this.item).subscribe(resp => {
             this.messageService.add({
                 severity: 'success',
                 summary: 'İşlem Durumu',
                 detail: 'Kayıt başarıyla kaydedildi'
             });
-            this.router.navigate(['../'], {relativeTo: this.activatedRoute}).then(() => {
-            });
+            // this.router.navigate(['../'], {relativeTo: this.activatedRoute}).then(() => {});
         }, (error) => {
             this.messageService.add({
                 severity: 'error',
@@ -128,42 +126,5 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
                 detail: 'Hata: ' + error.error.error.message
             });
         });
-    }
-
-    getManufacturerList() {
-        const sb = this.manufacturerService.getList(new Manufacturer()).subscribe(resp => {
-            console.log('Manufacturer list ---->>', resp.result.items);
-            this.manufacturerList = resp.result.items;
-            this.cdr.detectChanges();
-        }, (error) => {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Veri çekme işlemi',
-                detail: 'Kayıtlar alınamadı! Hata:' + JSON.stringify(error)
-            });
-        });
-        this.subscriptions.push(sb);
-    }
-
-    getCategoryList() {
-        const sb = this.categoryService.getList(new Category()).subscribe(resp => {
-            console.log('Category list ---->>', resp.result.items);
-            this.categoryList = resp.result.items;
-            this.cdr.detectChanges();
-        }, (error) => {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Veri çekme işlemi',
-                detail: 'Kayıtlar alınamadı! Hata:' + JSON.stringify(error)
-            });
-        });
-        this.subscriptions.push(sb);
-    }
-
-    calc(item: Product) {
-        if (item.price != null && item.unitQuantity != null && item.unitQuantity > 0) {
-            item.unitPrice = +(item.price / item.unitQuantity).toFixed(2);
-            // item.unitPriceStr = this._decimalPipe.transform(item.unitPrice, '1.2-2');
-        }
     }
 }

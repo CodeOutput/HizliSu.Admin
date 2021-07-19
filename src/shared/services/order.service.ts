@@ -7,6 +7,7 @@ import {environment} from '../../environments/environment';
 import {AppConsts} from '../AppConsts';
 import {Observable} from 'rxjs';
 import {Product} from '../models/product.model';
+import {Order} from '../models/order.model';
 
 @Injectable()
 export class OrderService {
@@ -33,8 +34,15 @@ export class OrderService {
             }));
     }
 
-    getItemById(productId: number) {
-        return this.http.get<any>(`${this.baseUrl}/api/services/app/Product/GetProductDetail?id=${productId}`)
+    getItemById(orderId: number) {
+        return this.http.get<any>(`${this.baseUrl}/api/services/app/Order/GetOrderDetailForAdmin?orderId=${orderId}`)
+            .pipe(map(resp => {
+                return resp;
+            }));
+    }
+
+    getOrderItemListByOrderId(orderId: number) {
+        return this.http.get<any>(`${this.baseUrl}/api/services/app/Order/GetOrderItemListForAdmin?orderId=${orderId}`)
             .pipe(map(resp => {
                 return resp;
             }));
@@ -47,4 +55,10 @@ export class OrderService {
             }));
     }
 
+    saveOrderStatus(row: Order) {
+        return this.http.put<any>(this.baseUrl + '/api/services/app/Order/UpdateOrderStatusForAdmin?orderId=' + row.id, row)
+            .pipe(map(resp => {
+                return resp;
+            }));
+    }
 }

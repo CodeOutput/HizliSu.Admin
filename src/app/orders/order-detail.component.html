@@ -12,154 +12,194 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header p-0">
-                    <h4>Ürün Detay</h4>
+                    <h4>Sipariş Detay</h4>
                     <ul class="ust_menu">
-                        <li routerLink="/app/products" pTooltip="Geri Dön" tooltipPosition="left">
+                        <li routerLink="/app/orders" pTooltip="Geri Dön" tooltipPosition="left">
                             <i class="pi pi-replay"></i>
                         </li>
-                        <li (click)="saveRow()" pTooltip="Bilgileri Kaydet" tooltipPosition="left">
-                            <i class="pi pi-save"></i>
-                        </li>
+<!--                        <li (click)="saveRow()" pTooltip="Bilgileri Kaydet" tooltipPosition="left">-->
+<!--                            <i class="pi pi-save"></i>-->
+<!--                        </li>-->
                     </ul>
                 </div>
 
                 <div class="card-body">
 
+                    <p-fieldset legend="Kullanıcı Bilgileri">
 
-                    <div class="p-grid p-fluid">
+                        <div class="form-row">
 
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="name">Kategori</label>
-                                <p-dropdown [options]="categoryList" class="p-inputtext-sm w-100"
-                                            filter="true"
-                                            [showClear]="true" placeholder="Seçiniz"
-                                            appendTo="body"
-                                            [style]="{'width':'100%'}"
-                                            optionValue="id"
-                                            optionLabel="name"
-                                            [(ngModel)]="item.categoryId">
-                                </p-dropdown>
+                            <div class="form-group col-md-2">
+                                <label>Ad</label>
+                                <input type="text" [(ngModel)]="item.user.name" [disabled]="true"
+                                       class="form-control form-control-sm"/>
                             </div>
-                        </div>
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="name">Marka</label>
-                                <p-dropdown [options]="manufacturerList" class="p-inputtext-sm w-100"
-                                            filter="true"
-                                            (onChange)="getListByManufacturerId($event.value)"
-                                            [showClear]="true" placeholder="Seçiniz"
-                                            appendTo="body"
-                                            [style]="{'width':'100%'}"
-                                            optionValue="id"
-                                            optionLabel="name"
-                                            [(ngModel)]="item.manufacturerId">
-                                </p-dropdown>
-                            </div>
-                        </div>
 
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="name">Tesis</label>
-                                <p-dropdown [options]="facilityList" class="p-inputtext-sm w-100"
-                                            filter="true"
-                                            [showClear]="true" placeholder="Seçiniz"
-                                            appendTo="body"
-                                            [style]="{'width':'100%'}"
-                                            optionValue="id"
-                                            optionLabel="name"
-                                            [(ngModel)]="item.facilityId">
-                                </p-dropdown>
+                            <div class="form-group col-md-2">
+                                <label>Soyad</label>
+                                <input type="text" [(ngModel)]="item.user.surname" [disabled]="true"
+                                       class="form-control form-control-sm"/>
                             </div>
-                        </div>
 
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="name">Ürün Adı</label>
-                                <input id="name" type="text" [(ngModel)]="item.name" pInputText class="p-inputtext-sm"/>
+                            <div class="form-group col-md-2">
+                                <label>Kullanıcı Adı</label>
+                                <input type="text" [(ngModel)]="item.user.userName" [disabled]="true"
+                                       class="form-control form-control-sm"/>
                             </div>
-                        </div>
 
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="sellerCode">Satıcı Kodu</label>
-                                <input id="sellerCode" type="text" [(ngModel)]="item.sellerCode" pInputText
-                                       class="p-inputtext-sm"/>
+                            <div class="form-group col-md-2">
+                                <label>E-posta</label>
+                                <input type="text" [(ngModel)]="item.user.emailAddress" [disabled]="true"
+                                       class="form-control form-control-sm"/>
                             </div>
-                        </div>
-                        <div class="p-col-12 p-md-3">
-                            <div class="p-field">
-                                <label for="barcode">Barkod</label>
-                                <input id="barcode" type="text" [(ngModel)]="item.barcode" pInputText
-                                       class="p-inputtext-sm"/>
-                            </div>
-                        </div>
 
-                        <div class="p-col-12 p-md-6">
-                            <div class="p-field">
-                                <label for="description">Açıklama</label>
-                                <input id="description" type="text" [(ngModel)]="item.description" pInputText
-                                       class="p-inputtext-sm"/>
+                            <div class="form-group col-md-2">
+                                <label>Telefon</label>
+                                <input type="text" [(ngModel)]="item.user.phoneNumber" [disabled]="true"
+                                       class="form-control form-control-sm"/>
                             </div>
-                        </div>
 
-                        <div class="p-col-12 p-md-1">
-                            <div class="p-field">
-                                <label for="stockQuantity">Stok Miktarı</label>
-                                <input id="stockQuantity" type="number" [(ngModel)]="item.stockQuantity" pInputText
-                                       class="p-inputtext-sm"/>
-                            </div>
-                        </div>
-
-                        <div class="p-col-12 p-md-2">
-                            <div class="p-field">
-                                <label for="price">Fiyatı</label>
-                                <input id="price" type="number" [(ngModel)]="item.price" pInputText
-                                       (focusout)="calc(item)"  (keyup)="calc(item)"
-                                       class="p-inputtext-sm"/>
-                            </div>
                         </div>
 
 
-                        <div class="p-col-12 p-md-2">
-                            <div class="p-field">
-                                <label for="unitQuantity">Paketteki Adet Sayısı</label>
-                                <input id="unitQuantity" type="number" [(ngModel)]="item.unitQuantity" pInputText
-                                       (focusout)="calc(item)" (keyup)="calc(item)"
-                                       class="p-inputtext-sm"/>
-                            </div>
-                        </div>
+                    </p-fieldset>
 
-                        <div class="p-col-12 p-md-1">
-                            <div class="p-field">
-                                <label for="unitPrice">Birim Fiyatı</label>
-                                <input id="unitPrice" type="number" disabled [(ngModel)]="item.unitPrice" pInputText
-                                       class="p-inputtext-sm"/>
-                            </div>
-                        </div>
+                    <div class="mt-4">
+                        <p-fieldset legend="Sipariş Bilgileri">
 
-                        <div class="p-col-12 p-md-2">
-                            <div class="p-field">
-                                <label>Yayınla</label>
-                                <div>
-                                    <p-checkbox [binary]="true" [(ngModel)]="item.published"></p-checkbox>
+                            <div class="form-row">
+
+                                <div class="form-group col-md-4">
+                                    <label>Sipariş Durumu</label>
+                                    <p-dropdown [options]="orderStatusList" class="p-inputtext-sm w-100"
+                                                filter="true"
+                                                placeholder="Seçiniz"
+                                                appendTo="body"
+                                                [style]="{'width':'100%'}"
+                                                optionValue="id"
+                                                optionLabel="name"
+                                                (onChange)="saveOrderStatus()"
+                                                [(ngModel)]="item.orderStatusId">
+                                    </p-dropdown>
                                 </div>
+
+                                <div class="form-group col-md-8">
+                                    <label>Sipariş Notu</label>
+                                    <input type="text" [(ngModel)]="item.orderNote"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label>Sipariş Tarihi</label>
+                                    <div style="background-color: #e9ecef"
+                                         class="form-control form-control-sm">{{item.creationTime|date:'dd.MM.yyyy HH:mm'}}</div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Sipariş Tutarı</label>
+                                    <div style="background-color: #e9ecef"
+                                         class="form-control form-control-sm">{{item.totalPrice |currency: "TRY":"symbol"}}</div>
+                                </div>
+
+
+                                <div class="form-group col-md-2">
+                                    <label>Adres Başlık</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.title"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-2">
+                                    <label>İl</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.city.name"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-2">
+                                    <label>İlçe</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.district.name"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-2">
+                                    <label>Mahalle</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.neighborhood.name"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-2">
+                                    <label>Cadde/Sokak</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.streetName"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-1">
+                                    <label>No</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.no"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
+                                <div class="form-group col-md-1">
+                                    <label>Kapı No</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.doorNumber"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label>Teslimat Telefonu</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.phoneNumber"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Adres Tarifi</label>
+                                    <input type="text" [(ngModel)]="item.userAddress.addressDescription"
+                                           [disabled]="true" class="form-control form-control-sm"/>
+                                </div>
+
+
                             </div>
-                        </div>
 
 
-                        <div class="p-col-12 p-md-9">
-                            <p-fileUpload name="content" customUpload="true" auto="auto"
-                                          chooseLabel="Resim seçiniz"
-                                          uploadLabel="Resim Yükle"
-                                          cancelLabel="İptal"
-                                          (uploadHandler)="fileUpload($event)">
-                            </p-fileUpload>
-                        </div>
+                        </p-fieldset>
+                    </div>
 
-                        <div class="p-col-12 p-md-3 text-center" *ngIf="imagePath!= null">
-                            <img [src]="imagePath" width="150" />
-                        </div>
+
+                    <div class="mt-4">
+                        <p-fieldset legend="Sipariş Edilen Ürünler">
+                            <p-table #dt1 [value]="orderItemList" dataKey="id"
+                                     [resizableColumns]="true" [autoLayout]="true"
+                                     styleClass="p-datatable-gridlines"
+                                     selectionMode="single">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th [style]="{'width':'80px'}">#</th>
+                                        <th>Ürün Resmi</th>
+                                        <th>Kategori</th>
+                                        <th>Marka</th>
+                                        <th>Ürün Adı</th>
+                                        <th>Paketteki Ürün Sayısı</th>
+                                        <th>Sipariş Miktarı</th>
+                                        <th>Ürün Fiyatı</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{ rowIndex + 1}}</td>
+                                        <td><img [src]="row.imagePath" width="50"/></td>
+                                        <td>{{row.product.category.name}}</td>
+                                        <td>{{row.product.manufacturer.name}}</td>
+                                        <td>{{row.product.name}}</td>
+                                        <td>{{row.product.unitQuantity}}</td>
+                                        <td>{{row.quantity}}</td>
+                                        <td>{{row.price |currency: "TRY":"symbol"}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
                     </div>
 
 

@@ -3220,6 +3220,7 @@ export class CreateUserDto implements ICreateUserDto {
     name: string | undefined;
     surname: string | undefined;
     emailAddress: string | undefined;
+    phoneNumber: string | undefined;
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string | undefined;
@@ -3239,6 +3240,7 @@ export class CreateUserDto implements ICreateUserDto {
             this.name = data["name"];
             this.surname = data["surname"];
             this.emailAddress = data["emailAddress"];
+            this.phoneNumber = data["phoneNumber"];
             this.isActive = data["isActive"];
             if (Array.isArray(data["roleNames"])) {
                 this.roleNames = [] as any;
@@ -3262,6 +3264,7 @@ export class CreateUserDto implements ICreateUserDto {
         data["name"] = this.name;
         data["surname"] = this.surname;
         data["emailAddress"] = this.emailAddress;
+        data["phoneNumber"] = this.phoneNumber;
         data["isActive"] = this.isActive;
         if (Array.isArray(this.roleNames)) {
             data["roleNames"] = [];
@@ -3285,6 +3288,7 @@ export interface ICreateUserDto {
     name: string | undefined;
     surname: string | undefined;
     emailAddress: string | undefined;
+    phoneNumber: string | undefined;
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string | undefined;
